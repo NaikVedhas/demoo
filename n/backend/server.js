@@ -10,11 +10,25 @@ const mongoose  = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors')
 
+// Dynamic CORS configuration
+const allowedOrigins = [
+    'http://localhost:5173', // For local development
+    'https://frontend-tau-eight-79.vercel.app', // Your deployed frontend URL
+];
 
-app.use(cors({      //we are usong this to handle cors error
-    origin:"https://frontend-tau-eight-79.vercel.app/",
-    credentials:true    // this means that allow origin to sned cookies along with response
-}))
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
+        credentials: true, // Allow credentials (cookies)
+    })
+);
+
 app.use(express.json({limit:"5mb"}));     //parse json. We addded limit bec if or imag is in mbs then we can get error from frontendt that payload is too large but now we wont get that error and will be able to handle images upto 5mb
 app.use(cookieParser());    //parse cookies
 
