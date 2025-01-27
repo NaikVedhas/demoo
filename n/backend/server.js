@@ -42,3 +42,9 @@ mongoose.connect(process.env.MONGODBURI)
 .catch((err)=>console.log(err))
 
 
+
+// Vercel expects an exported function
+module.exports = (req, res) => {
+    // We use express to handle the requests
+    app.handle(req, res);
+};
